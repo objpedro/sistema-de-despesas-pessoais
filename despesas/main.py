@@ -10,6 +10,9 @@ from matplotlib.figure import Figure
 from tkcalendar import Calendar, DateEntry
 from datetime import date
 
+#importando funções da view
+from view import bar_valores, inserir_categoria, ver_categorias, inserir_gastos, ver_gastos, inserir_receita, ver_Receitas
+
 ################# cores ###############
 co0 = "#2e2d2b"  # Preta
 co1 = "#feffff"  # branca
@@ -55,6 +58,33 @@ app_img = ImageTk.PhotoImage(app_img)
 app_logo = Label(frameCima, image=app_img, text=" Orçamento pessoal", width=900, compound=LEFT, padx=5, relief=RAISED, anchor=NW, font=('Verdana 20 bold'),bg=co1, fg=co4 )
 
 app_logo.place(x=0, y=0)
+
+#Definindo tree global
+global tree
+
+# funcao inserir categoria
+
+def inserir_categoria_b():
+    nome = e_n_categoria.get()
+
+    lista_inserir = [nome]
+
+    for i in lista_inserir:
+        if i=='':
+            messagebox.showerror('Erro', 'Preencha todos os campos')
+            return
+        
+    #passando a lista para a função inserir gastos presente na view
+    inserir_categoria(lista_inserir)
+    messagebox.showinfo('Sucesso', 'Dados inseridos com sucesso')
+    e_n_categoria.delete(0, 'end')
+    #Pegando os valores da categoria 
+    categorias_funcao = ver_categorias()
+    categoria = []
+    for i in categorias_funcao:
+        categoria.append(i[1])
+    #atualizando a lista de categorias
+    combo_categoria_despesas['values'] = (categoria)
 
 # percentagem ------------------------------------
 
@@ -317,7 +347,7 @@ e_n_categoria.place(x=110, y=160)
 img_add_categoria  = Image.open('add.png')
 img_add_categoria = img_add_categoria.resize((17,17))
 img_add_categoria = ImageTk.PhotoImage(img_add_categoria)
-botao_inserir_categoria = Button(frame_configuracao,image=img_add_categoria, compound=LEFT, anchor=NW, text=" Adicionar".upper(), width=80, overrelief=RIDGE,  font=('ivy 7 bold'),bg=co1, fg=co0 )
+botao_inserir_categoria = Button(frame_configuracao, command=inserir_categoria_b, image=img_add_categoria, compound=LEFT, anchor=NW, text=" Adicionar".upper(), width=80, overrelief=RIDGE,  font=('ivy 7 bold'),bg=co1, fg=co0 )
 botao_inserir_categoria.place(x=110, y=190)
 
 janela.mainloop ()
